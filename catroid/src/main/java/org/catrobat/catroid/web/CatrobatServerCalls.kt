@@ -35,6 +35,7 @@ import org.catrobat.catroid.common.Constants
 import org.catrobat.catroid.common.Constants.CATROBAT_TOKEN_LOGIN_AMP_TOKEN
 import org.catrobat.catroid.common.Constants.CATROBAT_TOKEN_LOGIN_URL
 import org.catrobat.catroid.common.Constants.NO_TOKEN
+import org.catrobat.catroid.common.ShareProjectData
 import org.catrobat.catroid.web.ServerAuthenticationConstants.CHECK_EMAIL_AVAILABLE_URL
 import org.catrobat.catroid.web.ServerAuthenticationConstants.CHECK_GOOGLE_TOKEN_URL
 import org.catrobat.catroid.web.ServerAuthenticationConstants.CHECK_TOKEN_URL
@@ -49,11 +50,14 @@ import org.catrobat.catroid.web.ServerAuthenticationConstants.SIGNIN_EMAIL_KEY
 import org.catrobat.catroid.web.ServerAuthenticationConstants.SIGNIN_OAUTH_ID_KEY
 import org.catrobat.catroid.web.ServerAuthenticationConstants.SIGNIN_USERNAME_KEY
 import org.catrobat.catroid.web.ServerAuthenticationConstants.USERNAME_AVAILABLE
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
+import java.util.ArrayList
 import java.util.HashMap
+
 
 class CatrobatServerCalls(private val okHttpClient: OkHttpClient = CatrobatWebClient.client) {
     private val tag = CatrobatServerCalls::class.java.simpleName
@@ -271,5 +275,109 @@ class CatrobatServerCalls(private val okHttpClient: OkHttpClient = CatrobatWebCl
 
     interface DownloadProgressCallback {
         fun onProgress(progress: Long)
+    }
+
+    @Throws(WebconnectionException::class)
+    fun getFeaturedProjects(
+        offset: Int,
+        limit: Int
+    ): List<ShareProjectData?>? {
+        val url =
+            ("https://share.catrob.at/api/projects/featured?platform=android&max_version"
+                + "=0.999&limit=" + limit + "&offset=" + offset)
+        //TODO: add flavor
+        var result: List<ShareProjectData?>? =
+            ArrayList()
+        val request = Request.Builder().url(url).header("Accept", "application/json").build()
+
+        try {
+            val response = okHttpClient.newCall(request).execute()
+            if (response.isSuccessful) {
+                val body = response.body()?.string()
+                if(!body.isNullOrEmpty()){
+                    val jsonObject = JSONArray(body)
+                    result = extractFeaturedProjectDataFromJson(jsonObject)
+                    val test = 1
+                }
+
+            } else {
+                Log.v(tag, "Download not successful")
+            }
+        } catch (e: IOException) {
+            Log.e(tag, Log.getStackTraceString(e))
+        }
+        return result
+    }
+
+    @Throws(JSONException::class)
+    private fun extractFeaturedProjectDataFromJson(jsonArray: JSONArray): List<ShareProjectData>? {
+        val programDataList =
+            ArrayList<ShareProjectData>()
+        for (i in 0 until jsonArray.length()) {
+            val programJsonData = jsonArray.getJSONObject(i)
+            val id = programJsonData.getString("id")
+            val name = programJsonData.getString("name")
+            val author = programJsonData.getString("author")
+            val image_url = programJsonData.getString("featured_image")
+            val projectData = ShareProjectData(
+                id, name, author,
+                image_url, null
+            )
+            programDataList.add(projectData)
+        }
+        return programDataList
+    }
+
+    @Throws(WebconnectionException::class)
+    fun getCategoryProjects(
+        limit: Int,
+        offset: Int,
+        category: String
+    ): List<ShareProjectData?>? {
+        val url = ("https://share.catrob.at/api/projects?category=" + category
+            + "&max_version=0.999&limit=" + limit + "&offset=" + offset)
+        //TODO: add flavor
+        var result: List<ShareProjectData?>? =
+            ArrayList()
+        val request = Request.Builder().url(url).header("Accept", "application/json").build()
+
+
+        try {
+
+            val response = okHttpClient.newCall(request).execute()
+            if (response.isSuccessful) {
+                val body = response.body()?.string()
+                if(!body.isNullOrEmpty()){
+                    val jsonObject = JSONArray(body)
+                    result = extractCategoriesProjectDataFromJson(jsonObject)
+                    val test = 1
+                }
+            } else {
+                Log.v(tag, "Download not successful")
+            }
+        } catch (e: IOException) {
+            Log.e(tag, Log.getStackTraceString(e))
+        }
+        return result
+    }
+
+    @Throws(JSONException::class)
+    private fun extractCategoriesProjectDataFromJson(jsonArray: JSONArray):
+        List<ShareProjectData>? {
+        val programDataList =
+            ArrayList<ShareProjectData>()
+        for (i in 0 until jsonArray.length()) {
+            val programJsonData = jsonArray.getJSONObject(i)
+            val id = programJsonData.getString("id")
+            val name = programJsonData.getString("name")
+            val author = programJsonData.getString("author")
+            val screenshot_large = programJsonData.getString("screenshot_large")
+            val project_url = programJsonData.getString("project_url")
+            val projectData = ShareProjectData(
+                id, name, author,
+                screenshot_large, project_url)
+            programDataList.add(projectData)
+        }
+        return programDataList
     }
 }
