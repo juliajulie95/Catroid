@@ -245,6 +245,10 @@ public class MainMenuActivity extends BaseCastActivity implements
 				Utils.logoutUser(this);
 				ToastUtil.showSuccess(this, R.string.logout_successful);
 				break;
+			case R.id.help:
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.CATROBAT_HELP_URL)));
+				break;
+
 			default:
 				return super.onOptionsItemSelected(item);
 		}

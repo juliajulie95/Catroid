@@ -143,8 +143,6 @@ public class MainMenuFragment extends Fragment implements
 
 		items.add(new RVButton(PROGRAMS, ContextCompat.getDrawable(getActivity(), R.drawable.ic_main_menu_programs),
 				getString(R.string.main_menu_programs)));
-		items.add(new RVButton(HELP, ContextCompat.getDrawable(getActivity(), R.drawable.ic_main_menu_help),
-				getString(R.string.main_menu_help)));
 		items.add(new RVButton(EXPLORE, ContextCompat.getDrawable(getActivity(), R.drawable.ic_main_menu_community),
 				getString(R.string.main_menu_web)));
 		return items;
@@ -194,10 +192,6 @@ public class MainMenuFragment extends Fragment implements
 			case PROGRAMS:
 				setShowProgressBar(true);
 				startActivity(new Intent(getActivity(), ProjectListActivity.class));
-				break;
-			case HELP:
-				setShowProgressBar(true);
-				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.CATROBAT_HELP_URL)));
 				break;
 			case EXPLORE:
 				setShowProgressBar(true);
