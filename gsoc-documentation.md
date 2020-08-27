@@ -18,6 +18,8 @@ https://github.com/Catrobat/Catroid/pull/3742
 4. Showing the last accessed projects
 https://github.com/Catrobat/Catroid/pull/3755
 
+5. Showing projects of the Share
+Implementing of API calls
 
 # Smaller tasks along the way:
 
