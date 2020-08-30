@@ -37,8 +37,8 @@ https://github.com/juliajulie95/Catroid/commit/cca8ce301bcabd79f94feb60e509327fc
 -> Finished but holding off merge until the API task is done
 
 ### 6. Showing projects of the Share
-Implementing of API calls and showing the featured projects and project categories of  in a horizontal scroll view.
-https://share.catrob.at/app/
+Implementing of API calls and showing the featured projects and project categories of https://share.catrob.at/app/ in a horizontal scroll view.
+
 -> This task is not finished completely, but will be worked on in September as discussed with my mentors.
 
 # Smaller tasks along the way:
