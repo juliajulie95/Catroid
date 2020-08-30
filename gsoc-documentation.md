@@ -1,6 +1,6 @@
 # GSoC documentation Julia Herold
-My Summer of Code project was the redesign and implementation of the app's landing page.
-At first I planned and designed the layout. The goal was to give the landing page a polished and user-friendly look, 
+My Summer of Code project was the redesign and implementation of the app's landing page.  
+At first I planned and designed the layout. The goal was to give the landing page a polished and user-friendly look,  
 but also to incorporate the webview of https://share.catrob.at/app/.
 
 ### Landing page before my GSoC project:
